@@ -1,3 +1,9 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX 1
+#include <windows.h>
+#endif
+
 #include <algorithm>
 #include <ctime>
 #include <iomanip>
@@ -58,6 +64,10 @@ public:
         int u = from - 1;
         int v = to - 1;
         if (u < 0 || u >= vertexCount || v < 0 || v >= vertexCount || weight < 0) {
+            return;
+        }
+        // В этой работе вес 0 для разных вершин трактуем как отсутствие ребра.
+        if (u != v && weight == 0) {
             return;
         }
         matrix[u][v] = weight;
@@ -199,6 +209,13 @@ public:
         return {dist[s][f], path, true};
     }
 };
+
+void setupRussianConsoleOutput() {
+#ifdef _WIN32
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+}
 
 string pathToString(const vector<int>& path) {
     if (path.empty()) return "-";
@@ -371,6 +388,7 @@ void runMainTask() {
 }
 
 int main() {
+    setupRussianConsoleOutput();
     cout << "Лабораторная работа: графы и кратчайшие пути\n";
     cout << "1 — выполнить контрольный тест\n";
     cout << "2 — выполнить основную задачу\n";
