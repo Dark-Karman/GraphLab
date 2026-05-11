@@ -310,17 +310,27 @@ void runMainTask() {
 
     Graph graph(8);
 
-    // Блок рёбер для варианта 13 (можно изменить под ваш рисунок варианта)
+    // Блок рёбер для варианта 13, функция подразумевает двусторонную связь (по этому повторная запись с перестановкай from to => to from не требуется)\
+
     graph.addUndirectedEdge(1, 2, 3);
+    graph.addUndirectedEdge(1, 6, 3);
+
     graph.addUndirectedEdge(2, 3, 6);
     graph.addUndirectedEdge(2, 4, 4);
     graph.addUndirectedEdge(2, 5, 2);
+
     graph.addUndirectedEdge(3, 4, 2);
+
     graph.addUndirectedEdge(4, 5, 1);
+    graph.addUndirectedEdge(4, 8, 7);
+
     graph.addUndirectedEdge(5, 6, 1);
+    graph.addUndirectedEdge(5, 8, 5);
+
     graph.addUndirectedEdge(6, 7, 5);
+    graph.addUndirectedEdge(6, 8, 4);
+
     graph.addUndirectedEdge(7, 8, 3);
-    graph.addUndirectedEdge(5, 8, 3);
 
     // Пример того, как добавлять остальные рёбра варианта 13:
     // graph.addUndirectedEdge(u, v, w);
