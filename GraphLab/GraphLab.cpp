@@ -1,3 +1,9 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX 1
+#include <windows.h>
+#endif
+
 #include <algorithm>
 #include <ctime>
 #include <iomanip>
@@ -60,6 +66,10 @@ public:
         if (u < 0 || u >= vertexCount || v < 0 || v >= vertexCount || weight < 0) {
             return;
         }
+        // В этой работе вес 0 для разных вершин трактуем как отсутствие ребра.
+        if (u != v && weight == 0) {
+            return;
+        }
         matrix[u][v] = weight;
     }
 
@@ -79,7 +89,7 @@ public:
         for (int i = 0; i < vertexCount; ++i) {
             cout << std::setw(3) << (i + 1) << " ";
             for (int j = 0; j < vertexCount; ++j) {
-                if (matrix[i][j] >= INF) {
+                if (matrix[i][j] >= INF || (i != j && matrix[i][j] == 0)) {
                     cout << std::setw(4) << "-";
                 } else {
                     cout << std::setw(4) << matrix[i][j];
@@ -127,6 +137,7 @@ public:
             for (int to = 0; to < vertexCount; ++to) {
                 if (to == broken) continue;
                 if (matrix[v][to] >= INF) continue;
+                if (to != v && matrix[v][to] == 0) continue;
                 if (dist[v] + matrix[v][to] < dist[to]) {
                     dist[to] = dist[v] + matrix[v][to];
                     parent[to] = v;
@@ -150,6 +161,14 @@ public:
         }
 
         vector<vector<int>> dist = matrix;
+        for (int i = 0; i < vertexCount; ++i) {
+            for (int j = 0; j < vertexCount; ++j) {
+                if (i != j && dist[i][j] == 0) {
+                    dist[i][j] = INF;
+                }
+            }
+        }
+
         vector<vector<int>> next(vertexCount, vector<int>(vertexCount, -1));
 
         for (int i = 0; i < vertexCount; ++i) {
@@ -199,6 +218,13 @@ public:
         return {dist[s][f], path, true};
     }
 };
+
+void setupRussianConsoleOutput() {
+#ifdef _WIN32
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+}
 
 string pathToString(const vector<int>& path) {
     if (path.empty()) return "-";
@@ -371,6 +397,7 @@ void runMainTask() {
 }
 
 int main() {
+    setupRussianConsoleOutput();
     cout << "Лабораторная работа: графы и кратчайшие пути\n";
     cout << "1 — выполнить контрольный тест\n";
     cout << "2 — выполнить основную задачу\n";
