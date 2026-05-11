@@ -1,3 +1,9 @@
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX 1
+#include <windows.h>
+#endif
+
 #include <algorithm>
 #include <ctime>
 #include <iomanip>
@@ -200,6 +206,13 @@ public:
     }
 };
 
+void setupRussianConsoleOutput() {
+#ifdef _WIN32
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+}
+
 string pathToString(const vector<int>& path) {
     if (path.empty()) return "-";
     string out;
@@ -371,6 +384,7 @@ void runMainTask() {
 }
 
 int main() {
+    setupRussianConsoleOutput();
     cout << "Лабораторная работа: графы и кратчайшие пути\n";
     cout << "1 — выполнить контрольный тест\n";
     cout << "2 — выполнить основную задачу\n";
