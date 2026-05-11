@@ -66,6 +66,10 @@ public:
         if (u < 0 || u >= vertexCount || v < 0 || v >= vertexCount || weight < 0) {
             return;
         }
+        // В этой работе вес 0 для разных вершин трактуем как отсутствие ребра.
+        if (u != v && weight == 0) {
+            return;
+        }
         matrix[u][v] = weight;
     }
 
